@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.rememberDrawerState
@@ -19,8 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun TopAppBar( scope: CoroutineScope? = null) {
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+fun TopAppBar(scope: CoroutineScope? = null, drawerState: DrawerState) {
 
     Row(horizontalArrangement = Arrangement.SpaceBetween,
     modifier = Modifier.fillMaxWidth(),
@@ -28,6 +28,7 @@ fun TopAppBar( scope: CoroutineScope? = null) {
         IconButton(onClick = {
             scope?.launch {
                 drawerState.open()
+                print("interesting")
             }
         }) {
             Image(
@@ -52,8 +53,8 @@ fun TopAppBar( scope: CoroutineScope? = null) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TopAppBarPreview() {
-    TopAppBar()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun TopAppBarPreview() {
+//    TopAppBar()
+//}
