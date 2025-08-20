@@ -25,13 +25,13 @@ object DishRepository {
             4.99,
             R.drawable.bruschetta
         ),
-        Dish(
-            4,
-            "Grilled Fish",
-            "Fish marinated in fresh orange and lemon juice. Grilled with orange and lemon wedges.",
-            19.99,
-            R.drawable.grilledfish
-        ),
+//        Dish(
+//            4,
+//            "Grilled Fish",
+//            "Fish marinated in fresh orange and lemon juice. Grilled with orange and lemon wedges.",
+//            19.99,
+//            R.drawable.grilledfish
+//        ),
         Dish(
             5,
             "Pasta",
