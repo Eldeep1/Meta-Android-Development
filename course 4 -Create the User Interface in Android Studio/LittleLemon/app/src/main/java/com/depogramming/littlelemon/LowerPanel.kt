@@ -6,7 +6,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,7 +41,6 @@ fun WeeklySpecialCard() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MenuDish(navController: NavHostController? = null, dish: Dish) {
     Card(onClick = {
@@ -49,8 +49,9 @@ fun MenuDish(navController: NavHostController? = null, dish: Dish) {
     }) {
         //TODO: Insert code here
     }
-    Divider(
+    HorizontalDivider(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp),
         thickness = 1.dp,
+        color = DividerDefaults.color
     )
 }
