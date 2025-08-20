@@ -1,15 +1,20 @@
 package com.depogramming.littlelemon
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -34,7 +39,7 @@ fun WeeklySpecialCard() {
     ) {
         Text(
             text = stringResource(R.string.weekly_special),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
                 .padding(8.dp)
         )
@@ -47,7 +52,29 @@ fun MenuDish(navController: NavHostController? = null, dish: Dish) {
         Log.d("AAA", "Click ${dish.id}")
         navController?.navigate(DishDetails.route + "/${dish.id}")
     }) {
-        //TODO: Insert code here
+        Row (
+            modifier = Modifier.fillMaxWidth().padding(8.dp)
+        ){
+            Column {
+                Text(
+                    text = dish.name,
+                    style = MaterialTheme.typography.titleMedium)
+                Text(
+                    modifier = Modifier.fillMaxWidth(.75F).padding(top = 5.dp, bottom = 5.dp),
+                    text = dish.description,
+                    style = MaterialTheme.typography.bodyLarge
+                    )
+                Text(
+                    text = "${dish.price}",
+                    style = MaterialTheme.typography.bodyMedium
+                    )
+            }
+            Image(
+                painter = painterResource(id = dish.imageResource),
+                contentDescription = "dish image",
+                modifier = Modifier.clip(shape = RoundedCornerShape(10.dp))
+            )
+        }
     }
     HorizontalDivider(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp),
