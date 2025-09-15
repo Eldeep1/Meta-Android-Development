@@ -3,18 +3,36 @@ package com.depogramming.littlelemonmenu
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonColors
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.view.MenuCompat
+import androidx.compose.ui.res.stringResource
 import com.depogramming.littlelemonmenu.ui.theme.LittleLemonMenuTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+
 
 
 class MainActivity : ComponentActivity() {
@@ -29,14 +47,98 @@ class MainActivity : ComponentActivity() {
         setContent { LittleLemonMenuTheme { InitUI() } }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun InitUI() {
         val context = LocalContext.current
+        var menuExpanded by remember { mutableStateOf(false) }
 
         val products by productsState.collectAsState()
-        ProductsGrid(products = products, onProductClick = {
-            productItem -> startProductActivity(productItem,context)
-        })
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Blue, // Set the background color here
+                        titleContentColor = Color.White, // Set the title color for good contrast
+                    ),
+                    title = { Text(stringResource(id = R.string.app_name)) },
+                    actions = {
+                        IconButton(onClick = { menuExpanded  = true }, colors = IconButtonDefaults.iconButtonColors(contentColor = Color.White)) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "Menu")
+                        }
+
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.sort_a_z)) },
+                                onClick = {
+                                    sortProducts(SortType.Alphabetically)
+                                    menuExpanded = false // Close the menu
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.sort_price_ascending)) },
+                                onClick = {
+                                    sortProducts(SortType.PriceAsc)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.sort_price_descending)) },
+                                onClick = {
+                                    sortProducts(SortType.PriceDesc)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.filter_food)) },
+                                onClick = {
+                                    filterProducts(FilterType.Food)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.filter_drinks)) },
+                                onClick = {
+                                    filterProducts(FilterType.Drinks)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.filter_food)) },
+                                onClick = {
+                                    filterProducts(FilterType.Food)
+                                    menuExpanded = false
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.filter_dessert)) },
+                                onClick = {
+                                    filterProducts(FilterType.Dessert)
+                                    menuExpanded = false
+                                }
+                            )
+                        }
+                    }
+                )
+            }
+        ) {paddingValues ->
+            ProductsGrid(
+                contentPadding = paddingValues,
+                products = products,
+                onProductClick = { productItem ->
+                    startProductActivity(productItem, context)
+                }
+            )
+        }
+    }
+
+    private fun filterProducts(food: FilterType) {}
+
+    private fun sortProducts(alphabetically: SortType) {
+
     }
 
     private fun startProductActivity(productItem: ProductItem,context: Context) {
@@ -46,47 +148,4 @@ class MainActivity : ComponentActivity() {
         context.startActivity(intent)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.products_menu, menu)
-        if (menu != null) {
-            MenuCompat.setGroupDividerEnabled(menu, true)
-        }
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.groupId == R.id.sorting) {
-            val type = when (item.itemId) {
-                R.id.sort_a_z -> SortType.Alphabetically
-                R.id.sort_price_asc -> SortType.PriceAsc
-                R.id.sort_price_desc -> SortType.PriceDesc
-                else -> SortType.Alphabetically
-            }
-            productsState.update {
-                Products(
-                    SortHelper().sortProducts(
-                        type,
-                        ProductsWarehouse.productsList
-                    )
-                )
-            }
-        } else if (item.groupId == R.id.filter) {
-            val type = when (item.itemId) {
-                R.id.filter_all -> FilterType.All
-                R.id.filter_drinks -> FilterType.Drinks
-                R.id.filter_food -> FilterType.Food
-                R.id.filter_dessert -> FilterType.Dessert
-                else -> FilterType.All
-            }
-            productsState.update {
-                Products(
-                    FilterHelper().filterProducts(
-                        type,
-                        ProductsWarehouse.productsList
-                    )
-                )
-            }
-        }
-        return true
-    }
 }

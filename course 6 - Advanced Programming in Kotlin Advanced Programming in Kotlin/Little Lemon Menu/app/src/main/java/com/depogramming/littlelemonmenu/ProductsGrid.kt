@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -20,12 +21,17 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductsGrid(products: Products,onProductClick:(ProductItem)->Unit) {
+fun ProductsGrid(
+    products: Products,
+    onProductClick: (ProductItem) -> Unit,
+    contentPadding: PaddingValues
+) {
     LazyVerticalGrid(
         columns  = GridCells.Fixed(count = 2),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(contentPadding)
     ) {
         items(
             items = products.items,
