@@ -1,6 +1,5 @@
 package com.depogramming.littlelemonmenu
 
-import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -16,14 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductsGrid(products: Products) {
-    val context = LocalContext.current
+fun ProductsGrid(products: Products,onProductClick:(ProductItem)->Unit) {
     LazyVerticalGrid(
         columns  = GridCells.Fixed(count = 2),
         contentPadding = PaddingValues(16.dp),
@@ -42,10 +39,7 @@ fun ProductsGrid(products: Products) {
                         contentDescription = productItem.title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.clickable {
-                            val intent = Intent(context, ProductActivity::class.java)
-                            intent.putExtra("product", productItem)
-                            context.startActivity(intent)
-
+                            onProductClick(productItem)
                         }
                     )
                     Text(text = productItem.title)

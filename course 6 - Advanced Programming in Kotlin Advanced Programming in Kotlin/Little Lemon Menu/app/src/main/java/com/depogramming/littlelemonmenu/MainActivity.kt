@@ -1,5 +1,7 @@
 package com.depogramming.littlelemonmenu
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -8,6 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.MenuCompat
 import com.depogramming.littlelemonmenu.ui.theme.LittleLemonMenuTheme
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,12 +31,19 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun InitUI() {
+        val context = LocalContext.current
+
         val products by productsState.collectAsState()
-        ProductsGrid(products = products)
+        ProductsGrid(products = products, onProductClick = {
+            productItem -> startProductActivity(productItem,context)
+        })
     }
 
-    private fun startProductActivity(productItem: ProductItem) {
-        //TODO instantiate intent and pass extra parameter from product
+    private fun startProductActivity(productItem: ProductItem,context: Context) {
+
+        val intent = Intent(context, ProductActivity::class.java)
+        intent.putExtra("product", productItem)
+        context.startActivity(intent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
