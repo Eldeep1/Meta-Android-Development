@@ -140,8 +140,9 @@ class MainActivity : ComponentActivity() {
         productsState.update { Products(filteredList) }
     }
 
-    private fun sortProducts(alphabetically: SortType) {
-
+    private fun sortProducts(sortType: SortType) {
+        val sortedList= SortHelper().sortProducts(sortType, ProductsWarehouse.productsList)
+        productsState.update { Products(sortedList) }
     }
 
     private fun startProductActivity(productItem: ProductItem,context: Context) {
