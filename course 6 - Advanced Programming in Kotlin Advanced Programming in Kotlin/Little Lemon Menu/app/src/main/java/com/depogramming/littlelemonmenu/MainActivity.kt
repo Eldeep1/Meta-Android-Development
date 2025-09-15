@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.depogramming.littlelemonmenu.ui.theme.LittleLemonMenuTheme
 import kotlinx.coroutines.flow.MutableStateFlow
-
+import kotlinx.coroutines.flow.update
 
 
 class MainActivity : ComponentActivity() {
@@ -93,9 +93,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.filter_food)) },
+                                text = { Text(stringResource(id = R.string.filter_all)) },
                                 onClick = {
-                                    filterProducts(FilterType.Food)
+                                    filterProducts(FilterType.All)
                                     menuExpanded = false
                                 }
                             )
@@ -135,7 +135,10 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun filterProducts(food: FilterType) {}
+    private fun filterProducts(type: FilterType) {
+        val filteredList = FilterHelper().filterProducts(type, ProductsWarehouse.productsList)
+        productsState.update { Products(filteredList) }
+    }
 
     private fun sortProducts(alphabetically: SortType) {
 
